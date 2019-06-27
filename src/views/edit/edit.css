@@ -1,0 +1,12 @@
+.Edit {
+    width: 80%;
+    margin: auto;
+    margin-top: 50px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.edit_toolbar {
+    position: sticky;
+    top: 45px;
+}

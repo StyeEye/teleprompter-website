@@ -7,3 +7,25 @@ export function updateUser(username) {
         payload: username
     }
 }
+
+export function refreshEvents(events) {
+    return {
+        type: types.refreshEvents,
+        payload: events
+    }
+}
+
+export function addEvent(event) {
+    //console.log("test")
+    return {
+        type: types.addEvent,
+        payload: event
+    }
+}
+
+export function updateEvent(event) {
+    return {
+        type: types.updateEvent,
+        payload: event
+    }
+}

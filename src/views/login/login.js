@@ -15,7 +15,7 @@ class Login extends Component {
     }
 
     handleChange = event => {
-        console.log(event.target)
+        //console.log(event.target)
         this.setState({
             [event.target.name]: event.target.value
         });
@@ -27,9 +27,9 @@ class Login extends Component {
             password: this.state.password
         };
 
-        axios.post(`/api/auth/register`, body)
+        axios.post(`/auth/register`, body)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 const { username, didRegister, message } = response.data;
 
                 console.log(message);
@@ -51,9 +51,9 @@ class Login extends Component {
             password: this.state.password
         };
 
-        axios.post(`/api/auth/login`, body)
+        axios.post(`/auth/login`, body)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 const { username, didLogin, message } = response.data;
 
                 console.log(message);

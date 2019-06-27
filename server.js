@@ -32,8 +32,11 @@ massive(process.env.CONNECTION_STRING)
     });
 
 // Endpoints
-app.post("/api/auth/register", controller.register);
-app.post("/api/auth/login", controller.login);
+app.post("/auth/register", controller.register);
+app.post("/auth/login", controller.login);
+app.post("/auth/me", controller.me);
+
+app.post("/api/project", controller.getProject);
 
 // Startup
 const port = process.env.PORT || 8090;

@@ -1,0 +1,8 @@
+.Timeline {
+    background-color: lightblue;
+    position: absolute;
+    right: 90%;
+    top: 40px;
+    height: calc(100% - 40px);
+    width: 10%;
+}
