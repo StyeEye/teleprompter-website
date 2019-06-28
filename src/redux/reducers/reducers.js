@@ -68,6 +68,13 @@ function events(state = [], action) {
 
             return fixIndexes(newState);
 
+        case types.removeEvent:
+            const filteredState = state.filter(e => {
+                return e.data.id !== action.payload;
+            });
+
+            return fixIndexes(filteredState);
+
         default:
             return state;
     }

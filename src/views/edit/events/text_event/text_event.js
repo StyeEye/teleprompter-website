@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateEvent } from "../../../../redux/action_creators/action_creators";
+import { updateEvent, removeEvent } from "../../../../redux/action_creators/action_creators";
+import axios from 'axios';
 
 import "./text_event.css";
 
@@ -22,37 +23,56 @@ class TextEvent extends Component {
     }
 
     onPlay = (event) => {
+        const shouldStart = !this.state.isPlaying;
+
         this.setState({
-            isPlaying: true
+            isPlaying: shouldStart
         })
 
-        setTimeout(() => {
-            this.setState({
-                isPlaying: false
+        if (shouldStart) {
+            setTimeout(() => {
+                this.setState({
+                    isPlaying: false
+                })
+            }, this.props.data.length * 1000 + 100);
+        }
+    }
+
+    removeEvent = (event) => {
+        const id = this.props.data.id;
+
+        axios.delete(`/api/events?eventId=${id}`)
+            .then(response => {
+                if (response.data.success) {
+                    this.props.removeEvent(id)
+                } else
+                    console.log(`Could not delete event ${id}`)
             })
-        }, this.props.data.length * 1000 + 100);
+            .catch(err => {
+                console.log("Could not remove event: ", err)
+            })
     }
 
     render() {
         const styling = this.state.isPlaying ?
-            {animation: `background_wipe ${this.props.data.length}s linear forwards`} :
+            { animation: `background_wipe ${this.props.data.length}s linear forwards` } :
             {};
 
         return (
             <div className="TextEvent">
                 <input type="text" name="text" value={this.props.data.text}
-                    onChange={this.onChange} style={styling}/>
+                    onChange={this.onChange} style={styling} />
                 <div className="text-action">
                     <h1>Instructions</h1>
                     <div className="text-image"></div>
                     <input type="text" placeholder="Instructions" />
-                    <br/>
+                    <br />
                     <input type="url" placeholder="Image URL" />
                 </div>
                 <div className="text-settings">
                     <div className="text-settings-buttons">
-                        <input type="button" value="Delete" />
-                        <input type="button" value="Play" onClick={this.onPlay}/>
+                        <input type="button" value="Delete" onClick={this.removeEvent}/>
+                        <input type="button" value={this.state.isPlaying ? "Stop" : "Play"} onClick={this.onPlay} />
                         <input type="button" value="" />
                     </div>
                     <label htmlFor="length">Seconds:</label>
@@ -69,4 +89,4 @@ class TextEvent extends Component {
     }
 }
 
-export default connect(null, { updateEvent })(TextEvent);
+export default connect(null, { updateEvent, removeEvent })(TextEvent);

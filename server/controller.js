@@ -88,15 +88,21 @@ module.exports = {
     getProject: (req, res, next) => {
         const db = req.app.get('db');
 
-        db.presentations.findOne({ user_id: req.session.userid })
+        //console.log(req.session)
+        if(!req.session.userid) {
+            res.send({
+                success: false,
+                message: "Bad session"
+            });
+
+            return;
+        }
+
+        db.presentations.findOne({ user_id: parseInt(req.session.userid) })
             .then(presentation => {
+                //console.log(req.session.userid, presentation)
                 if (presentation) {
-                    res.send({
-                        projectId: presentation.id,
-                        projectName: presentation.name,
-                        projectJson: presentation.body_json,
-                        dataVersion: presentation.data_version
-                    })
+                    return presentation;
                 }
                 else {
                     return db.presentations.insert({
@@ -107,15 +113,19 @@ module.exports = {
                     })
                 }
             })
-            .then(presentation => {
+            .then(newPresentation => {
+                //console.log(newPresentation)
+                if (!newPresentation)
+                    throw "Something went wrong";
                 res.send({
-                    projectId: presentation.id,
-                    projectName: presentation.name,
-                    projectJson: presentation.body_json,
-                    dataVersion: presentation.data_version
+                    projectId: newPresentation.id,
+                    projectName: newPresentation.name,
+                    projectJson: newPresentation.body_json,
+                    dataVersion: newPresentation.data_version
                 })
             })
             .catch(err => {
+                console.log(err)
                 res.send({
                     success: false,
                     message: err
@@ -127,30 +137,78 @@ module.exports = {
 
         db.presentations.findOne({ user_id: req.session.userid })
             .then(presentation => {
-                if (presentation) {
-                    res.send({
-                        projectId: presentation.id,
-                        projectName: presentation.name,
-                        projectJson: presentation.body_json,
-                        dataVersion: presentation.data_version
-                    })
-                }
-                else {
-                    return db.presentations.insert({
-                        user_id: req.session.userid,
-                        name: "Presentation",
-                        body_json: "",
-                        data_version: 1
-                    })
-                }
+                if (presentation)
+                    return db.events.find({presentation_id:  presentation.id})
+                else
+                    throw "No presentation";
             })
-            .then(presentation => {
-                res.send({
-                    projectId: presentation.id,
-                    projectName: presentation.name,
-                    projectJson: presentation.body_json,
-                    dataVersion: presentation.data_version
+            .then(events => {
+                const output = events.map(e => {
+                    //console.log(e)
+                    return {
+                        eventId: e.id,
+                        eventType: e.event_type,
+                        eventData: JSON.parse(e.body_json),
+                        dataVersion: e.data_version
+                    }
                 })
+                res.send(output);
+            })
+            .catch(err => {
+                res.send({
+                    success: false,
+                    message: err
+                })
+            })
+    },
+    addEvent: (req, res, next) => {
+        const db = req.app.get('db');
+
+        db.presentations.findOne({ user_id: req.session.userid })
+            .then(presentation => {
+                if (presentation) {
+                    const {eventType, eventData, dataVersion} = req.body;
+
+                    return db.events.insert({
+                        presentation_id: presentation.id,
+                        event_type: eventType,
+                        body_json: JSON.stringify(eventData),
+                        data_version: dataVersion
+                    })
+                }
+                else
+                    throw "No presentation";
+            })
+            .then(event => {
+                res.send({
+                    success: true,
+                    event: {
+                        eventId: event.id,
+                        eventType: event.event_type,
+                        eventData: JSON.parse(event.body_json),
+                        dataVersion: event.data_version
+                    }
+                });
+            })
+            .catch(err => {
+                res.send({
+                    success: false,
+                    message: err
+                })
+            })
+    },
+    removeEvent: (req, res, next) => {
+        const db = req.app.get('db');
+        const eventId = parseInt(req.query.eventId);
+        //console.log(eventId)
+        db.verify_event_owner({event_id: eventId, user_id: req.session.userid})
+            .then(matches => {
+                matches.forEach(e => {
+                    db.events.destroy({id: e.id})
+                });
+                res.send({
+                    success: true
+                });
             })
             .catch(err => {
                 res.send({

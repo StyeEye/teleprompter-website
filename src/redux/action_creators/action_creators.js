@@ -29,3 +29,10 @@ export function updateEvent(event) {
         payload: event
     }
 }
+
+export function removeEvent(eventId) {
+    return {
+        type: types.removeEvent,
+        payload: eventId
+    }
+}
