@@ -147,7 +147,7 @@ class Edit extends Component {
         return (
             <div className="Edit">
                 <Header />
-                <Timeline />
+                {/* <Timeline /> */}
                 <div className="edit_toolbar">
                     <button onClick={this.addText}>Add Text</button>
                     <button>Add Timestamp</button>

@@ -71,9 +71,10 @@ class TextEvent extends Component {
                 </div>
                 <div className="text-settings">
                     <div className="text-settings-buttons">
-                        <input type="button" value="Delete" onClick={this.removeEvent}/>
-                        <input type="button" value={this.state.isPlaying ? "Stop" : "Play"} onClick={this.onPlay} />
-                        <input type="button" value="" />
+                        {/* <input type="button" value="Delete" onClick={this.removeEvent}/> */}
+                        <button onClick={this.removeEvent} style={{backgroundImage: `url(https://bigbucketsforever.s3-us-west-1.amazonaws.com/trash-32.png)`}}/>
+                        <button onClick={this.onPlay} style={{backgroundImage: `url(https://bigbucketsforever.s3-us-west-1.amazonaws.com/icons8-play-32.png)`}}/>
+                        {/* <input type="button" value={this.state.isPlaying ? "Stop" : "Play"} onClick={this.onPlay} /> */}
                     </div>
                     <label htmlFor="length">Seconds:</label>
                     <input type="number" name="length" id="" value={this.props.data.length} onChange={this.onChange} />
