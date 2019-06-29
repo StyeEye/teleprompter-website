@@ -77,7 +77,7 @@ class Edit extends Component {
                                 index: parseInt(e.eventData.index),
                                 text: e.eventData.text,
                                 length: parseInt(e.eventData.length),
-                                delay: parseInt(e.eventData.length),
+                                delay: parseInt(e.eventData.delay),
                                 id: parseInt(e.eventId)
                             }
                         }
@@ -123,13 +123,36 @@ class Edit extends Component {
                         index: parseInt(eventData.index),
                         text: eventData.text,
                         length: parseInt(eventData.length),
-                        delay: parseInt(eventData.length),
+                        delay: parseInt(eventData.delay),
                         id: parseInt(eventId)
                     }
                 })
             })
             .catch(err => {
                 console.log(err);
+            })
+    }
+
+    syncChanges = (event) => {
+        const filtered = this.props.events.filter(e => e.hasChanged);
+        const body = filtered.map(e => ({
+            eventId: e.data.id,
+            eventType: e.type,
+            dataVersion: 1,
+            eventData: {
+                index: e.data.index,
+                text: e.data.text,
+                length: e.data.length,
+                delay: e.data.delay,
+            }
+        }));
+
+        axios.patch("/api/events", body)
+            .then(response => {
+
+            })
+            .catch(err => {
+                console.log("Error when syncing:", err);
             })
     }
 
@@ -143,7 +166,12 @@ class Edit extends Component {
                 default:
                     return <div>Bad Event</div>;
             }
-        })
+        });
+
+        const totalLength = this.props.events.reduce((length, e) => {
+            return length + Number(e.data.length) + Number(e.data.delay);
+        }, 0);
+
         return (
             <div className="Edit">
                 <Header />
@@ -151,7 +179,8 @@ class Edit extends Component {
                 <div className="edit_toolbar">
                     <button onClick={this.addText}>Add Text</button>
                     <button>Add Timestamp</button>
-                    <button>Save project</button>
+                    <button onClick={this.syncChanges}>Save project</button>
+                    <span>Total length: {totalLength} seconds</span>
                 </div>
                 <div className="edit_center">
                     {events}

@@ -16,8 +16,11 @@ function initialSort(eventList) {
 
     let trueIndex = 0;
     return sortedList.map(e => {
-        if (e.data.hasOwnProperty("index"))
+        if (e.data.hasOwnProperty("index")) {
+            if (e.data.index !== trueIndex)
+                e.hasChanged = true;
             e.data.index = trueIndex++;
+        }
 
         return e;
     })
@@ -25,8 +28,10 @@ function initialSort(eventList) {
 
 function fixIndexes(eventList) {
     return eventList.map((e, i) => {
-        //debugger;
-        e.data.index = i;
+        if (e.data.index !== i) {
+            e.hasChanged = true;
+            e.data.index = i;
+        }
         return e;
     })
 }
@@ -58,6 +63,7 @@ function events(state = [], action) {
 
             if (target !== -1) {
                 newState[target].data = action.payload;
+                newState[target].hasChanged = true;
 
                 const moved = newState.splice(target, 1)[0];
 

@@ -216,5 +216,23 @@ module.exports = {
                     message: err
                 })
             })
+    },
+    updateEvents: (req, res, next) => {
+        const db = req.app.get('db');
+
+        const updates = req.body;
+
+        updates.forEach(e => {
+            db.events.update({id: e.eventId}, {
+                event_type: e.eventType,
+                body_json: JSON.stringify(e.eventData),
+                data_version: e.dataVersion
+            })
+        })
+
+        res.send({
+            success: true,
+            message: "Update attempted"
+        });
     }
 };

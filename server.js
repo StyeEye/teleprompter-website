@@ -19,7 +19,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 60000000 }
 }));
 
 // Database setup
@@ -43,6 +43,7 @@ app.post("/api/project", controller.getProject);
 app.get("/api/events", controller.getEvents);
 app.post("/api/events/create", controller.addEvent);
 app.delete("/api/events", controller.removeEvent);
+app.patch("/api/events", controller.updateEvents);
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {
