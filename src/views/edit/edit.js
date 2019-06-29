@@ -57,38 +57,6 @@ class Edit extends Component {
         //         }
         //     }
         // ])
-
-        axios.post("/api/project")
-            .then(response => {
-                if (response.data.hasOwnProperty("success") && !response.data.success)
-                    throw `Bad project: ${response.data.message}`;
-                else {
-                    return axios.get("/api/events")
-                }
-            })
-            .then(response => {
-                if (response.data.hasOwnProperty("success") && !response.data.success)
-                    throw `Can't get events: ${response.data.message}`;
-                else {
-                    const events = response.data.map(e => {
-                        return {
-                            type: parseInt(e.eventType),
-                            data: {
-                                index: parseInt(e.eventData.index),
-                                text: e.eventData.text,
-                                length: parseInt(e.eventData.length),
-                                delay: parseInt(e.eventData.delay),
-                                id: parseInt(e.eventId)
-                            }
-                        }
-                    });
-
-                    this.props.refreshEvents(events);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
     }
 
     addText = () => {
@@ -103,7 +71,9 @@ class Edit extends Component {
             index: index,
             length: 1,
             delay: 0,
-            text: ""
+            text: "",
+            instructions: "",
+            instructImage: ""
         }
 
         axios.post("/api/events/create", {
@@ -124,7 +94,9 @@ class Edit extends Component {
                         text: eventData.text,
                         length: parseInt(eventData.length),
                         delay: parseInt(eventData.delay),
-                        id: parseInt(eventId)
+                        id: parseInt(eventId),
+                        instructions: eventData.instructions,
+                        instructImage: eventData.instructImage
                     }
                 })
             })
@@ -144,6 +116,8 @@ class Edit extends Component {
                 text: e.data.text,
                 length: e.data.length,
                 delay: e.data.delay,
+                instructions: e.data.instructions,
+                instructImage: e.data.instructImage
             }
         }));
 

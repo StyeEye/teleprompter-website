@@ -65,9 +65,9 @@ class TextEvent extends Component {
                 <div className="text-action">
                     <h1>Instructions</h1>
                     <div className="text-image"></div>
-                    <input type="text" placeholder="Instructions" />
+                    <input type="text" name="instructions" value={this.props.data.instructions} onChange={this.onChange} placeholder="Instructions" />
                     <br />
-                    <input type="url" placeholder="Image URL" />
+                    <input type="url" name="instructImage" value={this.props.data.instructImage} onChange={this.onChange} placeholder="Image URL" />
                 </div>
                 <div className="text-settings">
                     <div className="text-settings-buttons">

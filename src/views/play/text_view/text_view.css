@@ -1,0 +1,70 @@
+.TextView {
+    border: 1px lightgray solid;
+    border-radius: 3px;
+    padding: 0;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    transition: all 0.2s;
+}
+
+.TextView>div {
+    border: 1px solid lightblue;
+    text-align: left;
+    margin: 5px;
+    background-color: lightgray;
+    flex: 1;
+}
+
+.text-view-text {
+    border-color: lightgreen;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.text-view-text>p {
+    display: inline-block;
+    width: auto;
+}
+
+.text-view-instruct {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.text-view-instruct>img {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+@keyframes play_wipe {
+    0% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(149, 243, 247) 50%);
+        background-position: 0 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    100% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(149, 243, 247) 50%);
+        background-size: 200%;
+        background-position: -100% 0;
+        background-color: white;
+    }
+}
+
+@keyframes play_delay {
+    0% {
+        background: linear-gradient(to right, lightgray 50%, rgb(255, 255, 255) 50%);
+        background-position: 0 0;
+        background-size: 200%;
+    }
+    100% {
+        background: linear-gradient(to right, lightgray 50%, rgb(255, 255, 255) 50%);
+        background-size: 200%;
+        background-position: 100% 0;
+    }
+}
