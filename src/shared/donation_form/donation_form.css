@@ -1,0 +1,28 @@
+.DonationForm {
+    background-color: rgba(117, 116, 116, 0.192);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 1;
+    opacity: 20;
+}
+
+/* .DonationForm>* {
+    flex: 1;
+} */
+
+/* .DonationForm::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;  
+    opacity: .4; 
+    z-index: -1;
+    background-color: rgba(117, 116, 116, 0.192);
+} */

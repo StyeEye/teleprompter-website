@@ -1,0 +1,41 @@
+.DonationSubform {
+    width: 400px;
+    margin: auto;
+    border: 1px #00BFFF solid;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: rgb(240, 240, 240);
+}
+.DonationSubform>input {
+    width: 100%;
+}
+
+.StripeElement, .DonationSubform>input {
+    box-sizing: border-box;
+
+    margin-bottom: 5px;
+  
+    height: 40px;
+  
+    padding: 10px 12px;
+  
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: white;
+  
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+  }
+  
+  .StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+  }
+  
+  .StripeElement--invalid {
+    border-color: #fa755a;
+  }
+  
+  .StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+  }

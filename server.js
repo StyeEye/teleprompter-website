@@ -37,6 +37,7 @@ app.use(express.static(path.join(__dirname, '/build')));
 
 app.post("/auth/register", controller.register);
 app.post("/auth/login", controller.login);
+app.post("/auth/logout", controller.logout);
 app.post("/auth/me", controller.me);
 
 app.post("/api/project", controller.getProject);
@@ -44,6 +45,8 @@ app.get("/api/events", controller.getEvents);
 app.post("/api/events/create", controller.addEvent);
 app.delete("/api/events", controller.removeEvent);
 app.patch("/api/events", controller.updateEvents);
+
+app.post("/api/donate", controller.stripeDonate);
 
 app.get('*', (req, res) => {
     res.sendFile('index.html', {

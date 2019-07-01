@@ -44,4 +44,4 @@ class App extends Component {
   }
 }
 
-export default connect(null, {updateUser})(App);
+export default connect(null, { updateUser })(App);

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const stripe = require("stripe")(process.env.STRIPE_TEST_KEY);
 
 module.exports = {
     register: (req, res, next) => {
@@ -79,6 +80,12 @@ module.exports = {
                 });
             });
     },
+    logout: (req, res, next) => {
+        req.session.destroy();
+        res.send({
+            success: true
+        });
+    },
     me: (req, res, next) => {
         if (req.session.user)
             res.send({ success: true, username: req.session.user })
@@ -89,7 +96,7 @@ module.exports = {
         const db = req.app.get('db');
 
         //console.log(req.session)
-        if(!req.session.userid) {
+        if (!req.session.userid) {
             res.send({
                 success: false,
                 message: "Bad session"
@@ -138,13 +145,13 @@ module.exports = {
         db.presentations.findOne({ user_id: req.session.userid })
             .then(presentation => {
                 if (presentation)
-                    return db.events.find({presentation_id:  presentation.id})
+                    return db.events.find({ presentation_id: presentation.id })
                 else
                     throw "No presentation";
             })
             .then(events => {
                 const output = events.map(e => {
-                    //console.log(e)
+                    //cconst stripe = require("stripe")("sk_test_qOux3W7iden878sB6Rwuhf9t0083wYYg4J");sole.log(e)
                     return {
                         eventId: e.id,
                         eventType: e.event_type,
@@ -167,7 +174,7 @@ module.exports = {
         db.presentations.findOne({ user_id: req.session.userid })
             .then(presentation => {
                 if (presentation) {
-                    const {eventType, eventData, dataVersion} = req.body;
+                    const { eventType, eventData, dataVersion } = req.body;
 
                     return db.events.insert({
                         presentation_id: presentation.id,
@@ -201,10 +208,10 @@ module.exports = {
         const db = req.app.get('db');
         const eventId = parseInt(req.query.eventId);
         //console.log(eventId)
-        db.verify_event_owner({event_id: eventId, user_id: req.session.userid})
+        db.verify_event_owner({ event_id: eventId, user_id: req.session.userid })
             .then(matches => {
                 matches.forEach(e => {
-                    db.events.destroy({id: e.id})
+                    db.events.destroy({ id: e.id })
                 });
                 res.send({
                     success: true
@@ -223,7 +230,7 @@ module.exports = {
         const updates = req.body;
 
         updates.forEach(e => {
-            db.events.update({id: e.eventId}, {
+            db.events.update({ id: e.eventId }, {
                 event_type: e.eventType,
                 body_json: JSON.stringify(e.eventData),
                 data_version: e.dataVersion
@@ -234,5 +241,21 @@ module.exports = {
             success: true,
             message: "Update attempted"
         });
+    },
+    stripeDonate: (req, res, next) => {
+        //console.log(req.body)
+        stripe.charges.create({
+            amount: 2000,
+            currency: "usd",
+            description: "An example charge",
+            source: req.body.token
+        })
+            .then(status => {
+                res.json({ status });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).end();
+            })
     }
 };
