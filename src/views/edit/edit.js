@@ -152,7 +152,7 @@ class Edit extends Component {
                 {/* <Timeline /> */}
                 <div className="edit_toolbar">
                     <button onClick={this.addText}>Add Text</button>
-                    <button>Add Timestamp</button>
+                    {/* <button>Add Timestamp</button> */}
                     <button onClick={this.syncChanges}>Save project</button>
                     <span>Total length: {totalLength} seconds</span>
                 </div>

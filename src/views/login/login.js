@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-
 import { updateUser } from "../../redux/action_creators/action_creators";
+
+import "./login.css";
 
 class Login extends Component {
     constructor(props) {
@@ -71,13 +72,15 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div className="Login">
                 <input type="text" name="username" placeholder="Username"
                     value={this.state.username} onChange={this.handleChange} />
                 <input type="password" name="password" placeholder="Password"
                     value={this.state.password} onChange={this.handleChange} />
-                <button onClick={this.tryRegistration}>Register</button>
-                <button onClick={this.tryLogin}>Login</button>
+                <div className="login-buttons">
+                    <button onClick={this.tryRegistration}>Register</button>
+                    <button onClick={this.tryLogin}>Login</button>
+                </div>
             </div>
         )
     }

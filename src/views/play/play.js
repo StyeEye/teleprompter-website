@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Header from "../../shared/header/header.js";
-import TextView from "./text_view/text_view"
+import TextView from "./text_view/text_view";
+
+import "./play.css";
 
 class Play extends Component {
     constructor(props) {
@@ -14,16 +16,23 @@ class Play extends Component {
             nextTime: 0,
             isPlaying: false,
             endTime: 0,
-            onDelay: false
+            onDelay: false,
+            timeLeft: 0,
+            nextSecond: 0
         }
     }
 
     startPlaying = () => {
+        const now = Date.now();
         this.setState({
             isPlaying: true,
-            endTime: Date.now() + this.state.timeLimit * 60000,
-            nextTime: Date.now() + 100
+            endTime: now + this.state.timeLimit * 60000,
+            nextTime: now + 100,
+            timeLeft: Math.floor(this.state.timeLimit * 60),
+            nextSecond: now + 1000
         }, this.playNext);
+
+        setTimeout(this.countDown, 1000);
     }
 
     playNext = (useDelay = true) => {
@@ -37,7 +46,7 @@ class Play extends Component {
         }
 
         const startDelay = Math.max(elem.data.delay * 1000, 0);
-        const interval = startDelay + Math.max(elem.data.length*1000, 0);
+        const interval = startDelay + Math.max(elem.data.length * 1000, 0);
         const drift = Date.now() - this.state.nextTime;
 
         this.setState({
@@ -63,27 +72,55 @@ class Play extends Component {
         this.setState({
             isPlaying: false,
             endTime: 0,
-            currentEvent: 0
+            currentEvent: 0,
+            timeLeft: 0,
+            nextSecond: 0
+        })
+    }
+
+    countDown = () => {
+        if (!this.state.isPlaying)
+            return;
+
+        const drift = Date.now() - this.state.nextSecond;
+        const nextDelay = Math.max(1000 - drift, 0);
+        const nextSecond = this.state.nextSecond + 1000;
+
+        this.setState({
+            timeLeft: this.state.timeLeft - 1,
+            nextSecond: nextSecond
+        });
+
+        setTimeout(this.countDown, nextDelay);
+    }
+
+    onChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
         })
     }
 
     render() {
         const cards = this.props.events.map((e, i) => {
             const playing = e.data.index === this.state.currentEvent && this.state.isPlaying;
-            return <TextView event={e} show={e.data.index >= this.state.currentEvent} playing={playing} onDelay={this.state.onDelay}/>
+            return <TextView event={e} show={e.data.index >= this.state.currentEvent} playing={playing} onDelay={this.state.onDelay} />
         });
+
+        const mainBody = this.state.isPlaying ?
+            <div className="play-countdown">
+                <p style={{ animation: `play_countdown linear forwards ${this.state.timeLimit * 60}s` }}>{`Time left: ${this.state.timeLeft}`}</p>
+                <div className="card-container">{cards}</div>
+            </div> :
+            (<div className="play-setup">
+                <input type="number" placeholder="Timelimit" value={this.state.timeLimit} onChange={this.onChange} name="timeLimit" />
+                Play
+                <button onClick={this.startPlaying}>Test</button>
+            </div>);
 
         return (
             <div className="Play">
                 <Header />
-                <div className="play-setup">
-                    <input type="number" placeholder="Timelimit" />
-                </div>
-                Play
-                <button onClick={this.startPlaying}>Test</button>
-                <div className="card-container">
-                    {cards}
-                </div>
+                {mainBody}
             </div>
         )
     }

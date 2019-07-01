@@ -25,15 +25,23 @@ class TextView extends Component {
                 delayAnimation = { backgroundColor: "white" };
             }
         }
+
+        const instructions = this.props.event.data.instructions ?
+            <p>{this.props.event.data.instructions}</p> : null;
+        const instructImage = this.props.event.data.instructImage ?
+            <img src={this.props.event.data.instructImage} alt="Bad image" /> : null;
+        const showSecondBox = Boolean(instructions || instructImage);
         return (
             <div className="TextView">
                 <div className="text-view-text" style={delayAnimation}>
-                    <p style={swipeAnimation}>{this.props.event.data.text}</p>
+                    <p><span style={swipeAnimation}>{this.props.event.data.text}</span></p>
                 </div>
-                <div className="text-view-instruct" style={delayAnimation}>
-                    <p>{this.props.event.data.instructions}</p>
-                    <img src={this.props.event.data.instructImage} alt="" />
-                </div>
+                {showSecondBox ?
+                    <div className="text-view-instruct" style={delayAnimation}>
+                        <p>{this.props.event.data.instructions}</p>
+                        <img src={this.props.event.data.instructImage} alt="" />
+                    </div> : null
+                }
             </div>
         )
     }

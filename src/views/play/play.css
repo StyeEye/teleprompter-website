@@ -1,0 +1,46 @@
+.play-countdown>p {
+    width: 80%;
+    background-color: grey;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+@keyframes play_countdown {
+    0% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(149, 247, 154) 50%);
+        background-position: 0 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    49% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(149, 247, 154) 50%);
+        background-position: -49% 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    50% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(245, 247, 149) 50%);
+        background-position: -50% 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    89% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(245, 247, 149) 50%);
+        background-position: -90% 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    90% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(247, 149, 149) 50%);
+        background-position: -90% 0;
+        background-size: 200%;
+        background-color: white;
+    }
+    100% {
+        background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(247, 149, 149) 50%);
+        background-size: 200%;
+        background-position: -100% 0;
+        background-color: white;
+    }
+}
