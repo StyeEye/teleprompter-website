@@ -18,7 +18,7 @@
 .main-icon {
     width: 40px;
     height: 40px;
-    background-image: url('https://bigbucketsforever.s3-us-west-1.amazonaws.com/icons8-tv-64.png');
+    background-image: url('../../main-icon.png');
     background-size: contain;
     background-position: center;
 }
@@ -26,9 +26,10 @@
 .edit-icon {
     width: 30px;
     height: 30px;
-    background-image: url('https://bigbucketsforever.s3-us-west-1.amazonaws.com/icons8-settings-32.png');
+    background-image: url('../../settings.svg');
     background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 .edit-icon-container {
@@ -38,9 +39,10 @@
 .play-icon {
     width: 30px;
     height: 30px;
-    background-image: url('https://bigbucketsforever.s3-us-west-1.amazonaws.com/icons8-play-32.png');
+    background-image: url('../../play.svg');
     background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 .link-icon {
